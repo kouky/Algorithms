@@ -19,11 +19,25 @@ indirect enum Tree<T: Comparable> {
             return Tree.Node(value, left, right.insert(x))
         case .Empty:
             return Tree.Node(x, Tree.Empty, Tree.Empty)
-        default: // Sucks we need a default
+        default: // FIXME: Try and nuke this default
             return Tree.Node(x, Tree.Empty, Tree.Empty)
         }
     }
     
+    func search(x: T) -> Bool {
+        switch self {
+        case let .Node(value, _, _) where x == value:
+            return true;
+        case let .Node(value, left, _) where x < value:
+            return left.search(x)
+        case let .Node(value, _, right) where x > value:
+            return right.search(x)
+        case .Empty:
+            return false
+        default: // FIXME: Try and nuke this default
+            return false
+        }
+    }
     
     func invert() -> Tree<T> {
         switch self {
@@ -33,7 +47,6 @@ indirect enum Tree<T: Comparable> {
             return Tree.Empty
         }
     }
-    
     
     func verify() -> Bool {
         switch self {
@@ -66,3 +79,5 @@ indirect enum Tree<T: Comparable> {
 var x = Tree.Empty.insert(5).insert(10).insert(3)
 x.invert()
 x.verify()
+x.search(5)
+x.search(20)
