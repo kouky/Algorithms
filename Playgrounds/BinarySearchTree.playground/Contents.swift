@@ -56,6 +56,29 @@ indirect enum Tree<T: Comparable> {
             return nil
         }
     }
+    
+    func delete(x: T) -> Tree<T> {
+        switch self {
+        case let .Node(value, Tree.Empty, Tree.Empty) where x == value:
+           return Tree.Empty
+        case let .Node(value, left, Tree.Empty) where x == value:
+           return left.delete(x)
+        case let .Node(value, Tree.Empty, right) where x == value:
+           return right.delete(x)
+        case let .Node(value, left, right) where x == value:
+            guard let successor = right.min() else {
+                return Tree.Empty
+            }
+            return Tree.Node(successor, left, right.delete(successor))
+        case let .Node(value, left, right) where x <= value:
+            return Tree.Node(value, left.delete(x), right)
+        case let .Node(value, left, right):
+            return Tree.Node(value, left, right.delete(x))
+        case .Empty:
+            return Tree.Empty
+        }
+    }
+    
     func invert() -> Tree<T> {
         switch self {
         case let .Node(value, left, right):
@@ -93,8 +116,9 @@ indirect enum Tree<T: Comparable> {
     }
 }
 
-var x = Tree.Empty.insert(5).insert(10).insert(3)
+var x = Tree.Empty.insert(10).insert(20).insert(3).insert(15).insert(8)
 x.invert()
 x.verify()
 x.search(5)
 x.search(20)
+x.delete(10).verify()
