@@ -35,6 +35,27 @@ indirect enum Tree<T: Comparable> {
         }
     }
     
+    func min() -> T? {
+        switch self {
+        case let .Node(value, Tree.Empty, _):
+            return value
+        case let .Node(_, left, _):
+            return left.min()
+        case .Empty:
+            return nil
+        }
+    }
+    
+    func max() -> T? {
+        switch self {
+        case let .Node(value, _, Tree.Empty):
+            return value
+        case let .Node(_, _, right):
+            return right.max()
+        case .Empty:
+            return nil
+        }
+    }
     func invert() -> Tree<T> {
         switch self {
         case let .Node(value, left, right):
