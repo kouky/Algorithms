@@ -15,11 +15,9 @@ indirect enum Tree<T: Comparable> {
         switch self {
         case let .Node(value, left, right) where x <= value:
             return Tree.Node(value, left.insert(x), right)
-        case let .Node(value, left, right) where x > value:
+        case let .Node(value, left, right):
             return Tree.Node(value, left, right.insert(x))
         case .Empty:
-            return Tree.Node(x, Tree.Empty, Tree.Empty)
-        default: // FIXME: Try and nuke this default
             return Tree.Node(x, Tree.Empty, Tree.Empty)
         }
     }
@@ -30,11 +28,9 @@ indirect enum Tree<T: Comparable> {
             return true;
         case let .Node(value, left, _) where x < value:
             return left.search(x)
-        case let .Node(value, _, right) where x > value:
+        case let .Node(_, _, right):
             return right.search(x)
         case .Empty:
-            return false
-        default: // FIXME: Try and nuke this default
             return false
         }
     }
