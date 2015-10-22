@@ -10,15 +10,6 @@ indirect enum List<T> {
     case Node(T, List<T>)
     case Empty
     
-    func add(x: T) -> List {
-        switch self {
-        case .Node(_, _):
-            return List.Node(x, self)
-        case .Empty:
-            return List.Node(x, List.Empty)
-        }
-    }
-
     func size() -> Int {
         switch self {
         case .Node(_, let list):
@@ -69,15 +60,22 @@ func create<T> () -> List<T> {
     return List.Empty
 }
 
-enum ListError: ErrorType {
-    case InvalidHeadOperation
+infix operator ~ { associativity right }
+func ~ <T> (left: T, right: List<T>) -> List<T> {
+    return List.Node(left, right)
 }
 
+// Create an empty list of Int
+let x: List<Int> = create()
 
-var x: List<Int> = create()
-var y = x.add(5).add(10).add(20).add(30)
-y.print()
-y.size()
-y.head()
-y.isEmpty()
-y.tail().print()
+// Create lists of Int - these are equivalent
+var z = 10 ~ 20 ~ 30 ~ 40 ~ create()
+z.print()
+
+// Head and Tail
+z.head()
+z.tail().print()
+
+// Size and Empty check
+z.size()
+z.isEmpty()
