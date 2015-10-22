@@ -24,7 +24,7 @@ indirect enum Tree<T: Comparable> {
     
     func search(x: T) -> Bool {
         switch self {
-        case let .Node(value, _, _) where x == value:
+        case .Node(x, _, _):
             return true;
         case let .Node(value, left, _) where x < value:
             return left.search(x)
@@ -59,13 +59,13 @@ indirect enum Tree<T: Comparable> {
     
     func delete(x: T) -> Tree<T> {
         switch self {
-        case let .Node(value, Tree.Empty, Tree.Empty) where x == value:
+        case .Node(x, Tree.Empty, Tree.Empty):
            return Tree.Empty
-        case let .Node(value, left, Tree.Empty) where x == value:
+        case .Node(x, let left, Tree.Empty):
            return left.delete(x)
-        case let .Node(value, Tree.Empty, right) where x == value:
+        case .Node(x, Tree.Empty, let right):
            return right.delete(x)
-        case let .Node(value, left, right) where x == value:
+        case .Node(x, let left, let right):
             guard let successor = right.min() else {
                 return Tree.Empty
             }
