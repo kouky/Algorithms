@@ -35,40 +35,38 @@ indirect enum Tree<T: Comparable> {
         }
     }
     
-    func min() -> T? {
+    func min() throws -> T {
         switch self {
         case let .Node(value, Tree.Empty, _):
             return value
         case let .Node(_, left, _):
-            return left.min()
+            return try! left.min()
         case .Empty:
-            return nil
+            throw TreeError.InvalidOperation
         }
     }
     
-    func max() -> T? {
+    func max() throws -> T {
         switch self {
         case let .Node(value, _, Tree.Empty):
             return value
         case let .Node(_, _, right):
-            return right.max()
+            return try! right.max()
         case .Empty:
-            return nil
+            throw TreeError.InvalidOperation
         }
     }
     
     func delete(x: T) -> Tree<T> {
         switch self {
         case .Node(x, Tree.Empty, Tree.Empty):
-           return Tree.Empty
+            return Tree.Empty
         case .Node(x, let left, Tree.Empty):
-           return left.delete(x)
+            return left.delete(x)
         case .Node(x, Tree.Empty, let right):
-           return right.delete(x)
+            return right.delete(x)
         case .Node(x, let left, let right):
-            guard let successor = right.min() else {
-                return Tree.Empty
-            }
+            let successor = try! right.min()
             return Tree.Node(successor, left, right.delete(successor))
         case let .Node(value, left, right) where x <= value:
             return Tree.Node(value, left.delete(x), right)
@@ -114,6 +112,10 @@ indirect enum Tree<T: Comparable> {
             return true
         }
     }
+}
+
+enum TreeError: ErrorType {
+    case InvalidOperation
 }
 
 var x = Tree.Empty.insert(10).insert(20).insert(3).insert(15).insert(8)
