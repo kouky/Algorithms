@@ -5,8 +5,6 @@
 //
 // Copyright (c) 2015 Michael Koukoullis <http://github.com/kouky>
 
-import XCPlayground
-
 indirect enum Tree<T: Comparable> {
     case Node(T, Tree<T>, Tree<T>)
     case Empty
