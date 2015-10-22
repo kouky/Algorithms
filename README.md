@@ -3,11 +3,12 @@
 
 This project aims to showcase common data structures and algorithms using Swift. The focus is simplicity and elegance for the purposes of teaching and learning.
 
-Implemented using Xcode playgrounds. 
+## Implementations
 
-## Trees
+The Xcode playgrounds in this repository implement the following:
 
-- Binary Search Tree
+- [Binary Search Tree](https://en.wikipedia.org/wiki/List_(abstract_data_type))
+- [List (Abstract Data Type)](https://en.wikipedia.org/wiki/List_(abstract_data_type))
  
 ## Contributions
 
