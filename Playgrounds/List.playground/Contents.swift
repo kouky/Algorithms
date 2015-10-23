@@ -12,8 +12,8 @@ indirect enum List<T> {
     
     func size() -> Int {
         switch self {
-        case .Node(_, let list):
-            return 1 + list.size()
+        case .Node(_, let tail):
+            return 1 + tail.size()
         case .Empty:
             return 0
         }
@@ -21,8 +21,8 @@ indirect enum List<T> {
     
     func head() -> T {
         switch self {
-        case .Node(let value, _):
-            return value
+        case .Node(let head, _):
+            return head
         case .Empty:
             fatalError("Invalid")
         }
@@ -30,8 +30,8 @@ indirect enum List<T> {
     
     func tail() -> List {
         switch self {
-        case .Node(_, let list):
-            return list
+        case .Node(_, let tail):
+            return tail
         case .Empty:
             return List.Empty
         }
@@ -43,6 +43,15 @@ indirect enum List<T> {
             return false
         case .Empty:
             return true
+        }
+    }
+
+    func foldl<U>(acc: U, _ f: (U, T) -> U) -> U {
+        switch self {
+        case let .Node(head, tail):
+            return tail.foldl(f(acc, head), f)
+        case .Empty:
+            return acc
         }
     }
     
@@ -79,3 +88,12 @@ z.tail().print()
 // Size and Empty check
 z.size()
 z.isEmpty()
+
+// Fold
+
+z.foldl(0, +)
+z.foldl(1, *)
+z.foldl(create()) { (acc, x) in
+    return (x * 2) ~ acc
+}.print()
+
