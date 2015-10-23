@@ -5,7 +5,6 @@
 //
 // Copyright (c) 2015 Michael Koukoullis <http://github.com/kouky>
 
-
 indirect enum List<T> {
     case Node(T, List<T>)
     case Empty

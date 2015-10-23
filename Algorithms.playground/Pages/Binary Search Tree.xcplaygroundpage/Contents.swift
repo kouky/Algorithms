@@ -96,7 +96,7 @@ indirect enum Tree<T: Comparable> {
     func verifySmaller(parentValue: T) -> Bool {
         switch self {
         case let .Node(value, left, right):
-           return value <= parentValue && left.verifySmaller(value) && right.verifyLarger(value)
+            return value <= parentValue && left.verifySmaller(value) && right.verifyLarger(value)
         case .Empty:
             return true
         }
