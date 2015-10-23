@@ -6,93 +6,86 @@
 // Copyright (c) 2015 Michael Koukoullis <http://github.com/kouky>
 
 indirect enum List<T> {
-    case Node(T, List<T>)
-    case Empty
+    case Cons(T, List<T>)
+    case Nil
     
     func size() -> Int {
         switch self {
-        case .Node(_, let tail):
+        case .Cons(_, let tail):
             return 1 + tail.size()
-        case .Empty:
+        case .Nil:
             return 0
         }
     }
     
     func head() -> T {
         switch self {
-        case .Node(let head, _):
+        case .Cons(let head, _):
             return head
-        case .Empty:
+        case .Nil:
             fatalError("Invalid")
         }
     }
     
     func tail() -> List {
         switch self {
-        case .Node(_, let tail):
+        case .Cons(_, let tail):
             return tail
-        case .Empty:
-            return List.Empty
+        case .Nil:
+            return List.Nil
         }
     }
     
     func isEmpty() -> Bool {
         switch self {
-        case .Node:
+        case .Cons:
             return false
-        case .Empty:
+        case .Nil:
             return true
         }
     }
 
     func foldl<U>(acc: U, _ f: (U, T) -> U) -> U {
         switch self {
-        case let .Node(head, tail):
+        case let .Cons(head, tail):
             return tail.foldl(f(acc, head), f)
-        case .Empty:
+        case .Nil:
             return acc
         }
     }
     
     func print() -> String {
         switch self {
-        case let .Node(value, list):
+        case let .Cons(value, list):
             return "\(value)," + list.print()
-        case .Empty:
+        case .Nil:
             return ""
         }
     }
 }
 
-func create<T> () -> List<T> {
-    return List.Empty
-}
-
+// Shorthand list construction
 infix operator ~ { associativity right }
 func ~ <T> (left: T, right: List<T>) -> List<T> {
-    return List.Node(left, right)
+    return List.Cons(left, right)
 }
 
-// Create an empty list of Int
-let x: List<Int> = create()
-
 // Create lists of Int - these are equivalent
-var z = 10 ~ 20 ~ 30 ~ 40 ~ create()
+var z = 10 ~ 20 ~ 30 ~ 40 ~ List.Nil
 z.print()
 
 // Head and Tail
 z.head()
 z.tail().print()
 
-// Size and Empty check
+// Size and Nil check
 z.size()
 z.isEmpty()
 
-// Fold
-
+// Foldl
 z.foldl(0, +)
 z.foldl(1, *)
-z.foldl(create()) { (acc, x) in
+z.foldl(List.Nil) { (acc, x) in
     return (x * 2) ~ acc
 }.print()
 
