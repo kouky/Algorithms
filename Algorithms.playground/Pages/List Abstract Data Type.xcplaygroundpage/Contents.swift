@@ -8,7 +8,9 @@
 indirect enum List<T> {
     case Cons(T, List<T>)
     case Nil
-    
+}
+
+extension List {
     func head() -> T {
         switch self {
         case .Cons(let head, _):
@@ -101,18 +103,18 @@ z.tail()
 z.foldl(0, +)
 z.foldl(1, *)
 z.foldl(List.Nil) { (acc, x) in
-    return (x * 2) ~ acc
+    (x * 3) ~ acc
 }
 
 // Functions implemeted with foldl
 z.size()
 z.reverse()
 z.filter { (item) -> Bool in
-    return item % 20 != 0
+    item % 2 == 0
 }
 z.map { (item) -> Int in
-    return item * 2
+    item * 2
 }
 z.map { (item) -> String in
-    return "$\(item).00"
+    "$\(item).00"
 }
