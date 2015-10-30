@@ -8,7 +8,15 @@
 indirect enum Tree<T: Comparable> {
     case Node(T, Tree<T>, Tree<T>)
     case Empty
-    
+}
+
+
+enum TreeError: ErrorType {
+    case InvalidMinOperation
+    case InvalidMaxOperation
+}
+
+extension Tree {
     func insert(x: T) -> Tree<T> {
         switch self {
         case let .Node(value, left, right) where x <= value:
@@ -40,7 +48,7 @@ indirect enum Tree<T: Comparable> {
         case let .Node(_, left, _):
             return try! left.min()
         case .Empty:
-            throw TreeError.InvalidOperation
+            throw TreeError.InvalidMinOperation
         }
     }
     
@@ -51,7 +59,7 @@ indirect enum Tree<T: Comparable> {
         case let .Node(_, _, right):
             return try! right.max()
         case .Empty:
-            throw TreeError.InvalidOperation
+            throw TreeError.InvalidMaxOperation
         }
     }
     
@@ -112,13 +120,11 @@ indirect enum Tree<T: Comparable> {
     }
 }
 
-enum TreeError: ErrorType {
-    case InvalidOperation
-}
-
-var x = Tree.Empty.insert(10).insert(20).insert(3).insert(15).insert(8)
+var x = Tree.Empty.insert(30).insert(20).insert(3).insert(15).insert(8)
 x.invert()
 x.verify()
 x.search(5)
 x.search(20)
 x.delete(10).verify()
+try x.min()
+try x.max()
