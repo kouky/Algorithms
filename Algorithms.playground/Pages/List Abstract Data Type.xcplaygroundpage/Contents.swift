@@ -66,11 +66,13 @@ indirect enum List<T> {
         }
         return x.reverse()
     }
-    
-    func print() -> String {
+}
+
+extension List : CustomStringConvertible {
+    var description: String {
         switch self {
         case let .Cons(value, list):
-            return "\(value)," + list.print()
+            return "\(value)," + list.description
         case .Nil:
             return ""
         }
@@ -85,32 +87,32 @@ func ~ <T> (left: T, right: List<T>) -> List<T> {
 
 // Create lists of Int
 let z = 1 ~ 2 ~ 3 ~ 4 ~ 5 ~ List.Nil
-z.print()
+z
 
 // Create lists of tuples
 let x = ("grapes", 5) ~ ("apple", 8) ~ List.Nil
-x.print()
+x
 
 // Head and Tail
 z.head()
-z.tail().print()
+z.tail()
 
 // Foldl
 z.foldl(0, +)
 z.foldl(1, *)
 z.foldl(List.Nil) { (acc, x) in
     return (x * 2) ~ acc
-}.print()
+}
 
 // Functions implemeted with foldl
 z.size()
-z.reverse().print()
+z.reverse()
 z.filter { (item) -> Bool in
     return item % 20 != 0
-}.print()
+}
 z.map { (item) -> Int in
     return item * 2
-}.print()
+}
 z.map { (item) -> String in
     return "$\(item).00"
-}.print()
+}
