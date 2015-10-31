@@ -195,6 +195,16 @@ extension Heap: CustomStringConvertible {
 }
 
 let x = Heap<Int>(items: [], ordering: Ordering.Min)
+// Min Heap
+let emptyMinHeap = Heap<Int>(items: [], ordering: Ordering.Min)
+let minHeap = emptyMinHeap.insert(10).insert(8).insert(2).insert(5).insert(7).insert(4)
+minHeap.peek()
+minHeap.extract()
+minHeap.extract().extract()
 
-let z = x.insert(10).insert(8).insert(1).insert(5).insert(7).insert(4)
-z.extract()
+// Max Heap
+let emptyMaxHeap = Heap<Int>(items: [], ordering: Ordering.Max)
+let maxHeap = emptyMaxHeap.insert(3).insert(2).insert(10).insert(4).insert(8).insert(7)
+maxHeap.peek()
+maxHeap.extract()
+maxHeap.extract().extract()
