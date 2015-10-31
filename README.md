@@ -9,7 +9,9 @@ The Xcode playgrounds in this repository implement the following:
 
 - [Binary Search Tree](https://en.wikipedia.org/wiki/List_(abstract_data_type))
 - [List (Abstract Data Type)](https://en.wikipedia.org/wiki/List_(abstract_data_type))
- 
+
+- [Heap](https://en.wikipedia.org/wiki/Heap_(data_structure))
+
 ## Contributions
 
 Are most welcome, please submit a pull request.
