@@ -3,5 +3,6 @@
     <pages>
         <page name='List Abstract Data Type'/>
         <page name='Binary Search Tree'/>
+        <page name='Heap'/>
     </pages>
 </playground>
