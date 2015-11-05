@@ -146,7 +146,6 @@ extension Heap {
                     return self
                 }
             case .Max:
-                                print("yo \(items[left]) \(items[right])")
                 if items[left] > items[index] {
                     return Heap(items: items.swapValuesForIndices(left, index), ordering: ordering).downHeap(left)
                 } else {
