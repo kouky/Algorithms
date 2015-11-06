@@ -66,6 +66,24 @@ private extension Heap {
         let leftChildIndex = 2 * index + 1
         return (leftChildIndex < items.endIndex) ? leftChildIndex : nil
     }
+    
+    func downHeapChildIndexForParentIndex(index: Int) -> Int? {
+        switch (self.leftChildIndexForIndex(index), self.rightChildIndexForIndex(index)) {
+        case (.None, .None):
+            return nil
+        case (.Some(let left), .None):
+            return left
+        case (.None, .Some(let right)):
+            return right
+        case (.Some(let left), .Some(let right)):
+            switch ordering {
+            case .Min:
+                return items[left] < items[right] ? left : right
+            case .Max:
+                return items[left] > items[right] ? left : right
+            }
+        }
+    }
 }
 
 // Operations to restore heap invariants
@@ -84,54 +102,15 @@ private extension Heap {
     }
     
     func downHeap(index: Int) -> Heap {
-        
-        switch (self.leftChildIndexForIndex(index), self.rightChildIndexForIndex(index)) {
-        case (.None, .None):
+        guard let childIndex = downHeapChildIndexForParentIndex(index) else {
             return self
-        case (.Some(let left), .None):
-            if ordering.satisfiedInvariantForParent(items[index], child: items[left]) {
-                return self
-            } else {
-                return Heap(items: items.swapValuesForIndices(left, index), ordering: ordering).downHeap(left)
-            }
-        case (.None, .Some(let right)):
-            if ordering.satisfiedInvariantForParent(items[index], child: items[right]) {
-                return self
-            } else {
-                return Heap(items: items.swapValuesForIndices(right, index), ordering: ordering).downHeap(right)
-            }
-        case (.Some(let left), .Some(let right)) where items[left] < items[right]:
-
-            switch ordering {
-            case .Min:
-
-                if items[left] < items[index] {
-                    return Heap(items: items.swapValuesForIndices(left, index), ordering: ordering).downHeap(left)
-                } else {
-                    return self
-                }
-            case .Max:
-                if items[right] > items[index] {
-                    return Heap(items: items.swapValuesForIndices(right, index), ordering: ordering).downHeap(right)
-                } else {
-                    return self
-                }
-            }
-        case (.Some(let left), .Some(let right)):
-            switch ordering {
-            case .Min:
-                if items[right] < items[index] {
-                    return Heap(items: items.swapValuesForIndices(right, index), ordering: ordering).downHeap(right)
-                } else {
-                    return self
-                }
-            case .Max:
-                if items[left] > items[index] {
-                    return Heap(items: items.swapValuesForIndices(left, index), ordering: ordering).downHeap(left)
-                } else {
-                    return self
-                }
-            }
+        }
+        
+        if ordering.satisfiedInvariantForParent(items[index], child: items[childIndex]) {
+            return self
+        }
+        else {
+            return Heap(items: items.swapValuesForIndices(childIndex, index), ordering: ordering).downHeap(childIndex)
         }
     }
 }
