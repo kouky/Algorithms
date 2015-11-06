@@ -11,12 +11,19 @@ import Darwin
 // Full and almost full binary heaps may be represented (as an implicit data structure) using an array alone.
 struct Heap<T: Comparable> {
     private let items: [T]
-    private let ordering: Ordering
+    private let ordering: Ordering<T>
 }
 
-enum Ordering {
+enum Ordering <T: Comparable> {
     case Min
     case Max
+    
+    func satisfiedInvariantForParent(parent: T, child: T) -> Bool {
+        switch self {
+        case .Min: return parent <= child
+        case .Max: return parent >= child
+        }
+    }
 }
 
 extension Heap {
@@ -68,20 +75,10 @@ extension Heap {
             return self
         }
         
-        switch ordering {
-        case .Min :
-            if items[parentIndex] > items[index] {
-                print(self.description)
-                return Heap(items: items.swapValuesForIndices(parentIndex, index), ordering: ordering).upHeap(parentIndex)
-            } else {
-                return self
-            }
-        case .Max:
-            if items[parentIndex] < items[index] {
-                return Heap(items: items.swapValuesForIndices(parentIndex, index), ordering: ordering).upHeap(parentIndex)
-            } else {
-                return self
-            }
+        if ordering.satisfiedInvariantForParent(items[parentIndex], child: items[index]) {
+            return self
+        } else {
+            return Heap(items: items.swapValuesForIndices(parentIndex, index), ordering: ordering).upHeap(parentIndex)
         }
     }
     
@@ -91,34 +88,16 @@ extension Heap {
         case (.None, .None):
             return self
         case (.Some(let left), .None):
-            switch ordering {
-            case .Min:
-                if items[left] < items[index] {
-                    return Heap(items: items.swapValuesForIndices(left, index), ordering: ordering).downHeap(left)
-                } else {
-                    return self
-                }
-            case .Max:
-                if items[left] > items[index] {
-                    return Heap(items: items.swapValuesForIndices(left, index), ordering: ordering).downHeap(left)
-                } else {
-                    return self
-                }
+            if ordering.satisfiedInvariantForParent(items[index], child: items[left]) {
+                return self
+            } else {
+                return Heap(items: items.swapValuesForIndices(left, index), ordering: ordering).downHeap(left)
             }
         case (.None, .Some(let right)):
-            switch ordering {
-            case .Min:
-                if items[right] < items[index] {
-                    return Heap(items: items.swapValuesForIndices(right, index), ordering: ordering).downHeap(right)
-                } else {
-                    return self
-                }
-            case .Max:
-                if items[right] > items[index] {
-                    return Heap(items: items.swapValuesForIndices(right, index), ordering: ordering).downHeap(right)
-                } else {
-                    return self
-                }
+            if ordering.satisfiedInvariantForParent(items[index], child: items[right]) {
+                return self
+            } else {
+                return Heap(items: items.swapValuesForIndices(right, index), ordering: ordering).downHeap(right)
             }
         case (.Some(let left), .Some(let right)) where items[left] < items[right]:
 
