@@ -26,6 +26,7 @@ enum Ordering <T: Comparable> {
     }
 }
 
+// Common heap operations
 extension Heap {
     
     // Return highest priority element (i.e. root of heap)
@@ -47,30 +48,30 @@ extension Heap {
 }
 
 // Implicit heap data strcuture can be navigated with index arithmentic
-extension Heap {
+private extension Heap {
     
-    private func parentIndexForIndex(index: Int) -> Int? {
+    func parentIndexForIndex(index: Int) -> Int? {
         guard index > 0 else {
             return nil
         }
         return (index - 1) / 2
     }
     
-    private func rightChildIndexForIndex(index: Int) -> Int? {
+    func rightChildIndexForIndex(index: Int) -> Int? {
         let rightChildIndex = 2 * index + 2
         return (rightChildIndex < items.endIndex) ? rightChildIndex : nil
     }
     
-    private func leftChildIndexForIndex(index: Int) -> Int? {
+    func leftChildIndexForIndex(index: Int) -> Int? {
         let leftChildIndex = 2 * index + 1
         return (leftChildIndex < items.endIndex) ? leftChildIndex : nil
     }
 }
 
-// Restore heap invariants
-extension Heap {
+// Operations to restore heap invariants
+private extension Heap {
     
-    private func upHeap(index: Int) -> Heap {
+    func upHeap(index: Int) -> Heap {
         guard let parentIndex = self.parentIndexForIndex(index) else {
             return self
         }
@@ -82,7 +83,7 @@ extension Heap {
         }
     }
     
-    private func downHeap(index: Int) -> Heap {
+    func downHeap(index: Int) -> Heap {
         
         switch (self.leftChildIndexForIndex(index), self.rightChildIndexForIndex(index)) {
         case (.None, .None):
@@ -141,7 +142,7 @@ extension Heap: CustomStringConvertible {
     }
 }
 
-extension Array {
+private extension Array {
     var lastIndex: Int {
         return self.endIndex - 1
     }
